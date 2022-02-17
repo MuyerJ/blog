@@ -18,7 +18,7 @@ public interface UserMapper {
     @Results({
             @Result(column = "username", property = "username"),
             @Result(column = "password", property = "password"),
-            @Result(column = "phone", property = "roles", javaType = List.class, many = @Many(select = "com.zhy.mapper.UserMapper.getRoleNameByPhone")),
+            @Result(column = "phone", property = "roles", javaType = List.class, many = @Many(select = "com.muyer.mapper.UserMapper.getRoleNameByPhone")),
     })
     User getUsernameAndRolesByPhone(@Param("phone") String phone);
 

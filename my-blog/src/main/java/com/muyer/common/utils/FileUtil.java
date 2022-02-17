@@ -1,5 +1,7 @@
 package com.muyer.common.utils;
 
+import com.aliyun.oss.OSSClient;
+import com.muyer.common.config.OSSClientConstants;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -10,6 +12,29 @@ import java.util.Base64;
  */
 public class FileUtil {
 
+    /**
+     * 上传文件到阿里云OSS
+     * @param file 文件流
+     * @return 返回文件URL
+     */
+    public String uploadFile(File file, String subCatalog){
+
+        //初始化OSSClient
+        OSSClient ossClient = AliYunOSSClientUtil.getOSSClient();
+
+        String md5Key = AliYunOSSClientUtil.uploadObject2OSS(ossClient, file, OSSClientConstants.BACKET_NAME,
+                OSSClientConstants.FOLDER + subCatalog + "/");
+        String url = AliYunOSSClientUtil.getUrl(ossClient, md5Key);
+        String picUrl = "https://" + OSSClientConstants.BACKET_NAME + "." + OSSClientConstants.ENDPOINT +
+                "/" + OSSClientConstants.FOLDER + subCatalog + "/" + file.getName();
+
+        //删除临时生成的文件
+        File deleteFile = new File(file.toURI());
+        deleteFile.delete();
+
+        return picUrl;
+
+    }
 
     /**
      * base64字符转换成file
